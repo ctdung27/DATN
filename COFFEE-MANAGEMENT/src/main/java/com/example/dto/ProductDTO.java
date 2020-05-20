@@ -8,6 +8,7 @@ public class ProductDTO extends AbstractDTO {
     private Integer price;
     private Integer quantity;
     private String checked;
+    private String productCategoryCode;
 
     public String getName() {
         return name;
@@ -55,5 +56,12 @@ public class ProductDTO extends AbstractDTO {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+    public String getProductCategoryCode() {
+        return productCategoryCode;
+    }
+
+    public void setProductCategoryCode(String productCategoryCode) {
+        this.productCategoryCode = productCategoryCode;
     }
 }

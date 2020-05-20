@@ -31,6 +31,12 @@ public class ProductEntity extends BaseEntity {
 	
 	@OneToMany(mappedBy = "product")
     private List<BillEntity> bills = new ArrayList<>();
+	
+	@ManyToOne
+	@JoinColumn(name = "productcategoryid")
+	private ProductCategoryEntity productCategory;
+
+
 
 	public String getName() {
 		return name;
@@ -78,5 +84,12 @@ public class ProductEntity extends BaseEntity {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+	public ProductCategoryEntity getProductCategory() {
+		return productCategory;
+	}
+
+	public void setProductCategory(ProductCategoryEntity productCategory) {
+		this.productCategory = productCategory;
 	}
 }

@@ -25,6 +25,16 @@ public class UserEntity extends BaseEntity {
 
 	@Column
 	private Integer status;
+	
+	@Column(name = "email")
+	private String email;
+	
+	@Column(name = "sdienthoai")
+	private String sdienthoai;
+	
+	@Column(name = "diachi")
+	private String diachi;
+	
 
 	@ManyToMany
 	@JoinTable(name = "user_role", 
@@ -71,4 +81,29 @@ public class UserEntity extends BaseEntity {
 	public void setRoles(List<RoleEntity> roles) {
 		this.roles = roles;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getSdienthoai() {
+		return sdienthoai;
+	}
+
+	public void setSdienthoai(String sdienthoai) {
+		this.sdienthoai = sdienthoai;
+	}
+
+	public String getDiachi() {
+		return diachi;
+	}
+
+	public void setDiachi(String diachi) {
+		this.diachi = diachi;
+	}
+	
 }

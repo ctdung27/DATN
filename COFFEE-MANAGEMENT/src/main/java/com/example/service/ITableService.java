@@ -9,5 +9,6 @@ public interface ITableService {
     TableDTO findById(long id);
     TableDTO insert(TableDTO tableDTO);
     TableDTO update(TableDTO tableDTO);
-    void deleteTable(long[] ids);
+    List<TableDTO> findByAreaCode(String areaCode);
+	void deleteTable(long[] ids);
 }

@@ -20,9 +20,12 @@ public class ProductAPI {
     private IProductService productService;
 
     @GetMapping("/order")
-    public ResponseEntity<List<ProductDTO>> loadProductBySeat(@RequestParam(value = "seatCode", required = false) String seatCode) {
-        return ResponseEntity.ok(orderService.findBySeatCode(seatCode));
-    }
+	public ResponseEntity<List<ProductDTO>> loadProductBySeatAndCategory(
+			@RequestParam(value = "seatCode", required = false) String seatCode,
+			@RequestParam(value = "productCategory", required = false) String productCategory) {
+		return ResponseEntity.ok(orderService.findBySeatCodeAndCategory(seatCode, productCategory));
+
+	}
 
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {

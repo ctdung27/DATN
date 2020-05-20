@@ -4,9 +4,37 @@ public class UserDTO extends AbstractDTO {
 
     private String userName;
     private String fullName;
+    private String email;
+    private String diachi;
+    private String sdienthoai;
     private String password;
     private Integer status;
-    private String roleCode;
+    
+    public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getDiachi() {
+		return diachi;
+	}
+
+	public void setDiachi(String diachi) {
+		this.diachi = diachi;
+	}
+
+	public String getSdienthoai() {
+		return sdienthoai;
+	}
+
+	public void setSdienthoai(String sdienthoai) {
+		this.sdienthoai = sdienthoai;
+	}
+
+	private String roleCode;
 
     public String getUserName() {
         return userName;

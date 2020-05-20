@@ -64,6 +64,10 @@ public class UserService implements IUserService {
         UserEntity oldUser = userRepository.findOne(userDTO.getId());
         oldUser.setUserName(userDTO.getUserName());
         oldUser.setFullName(userDTO.getFullName());
+        oldUser.setDiachi(userDTO.getDiachi());
+        oldUser.setEmail(userDTO.getEmail());
+        oldUser.setSdienthoai(userDTO.getSdienthoai());
+        
         oldUser.setRoles(Stream.of(role).collect(Collectors.toList()));
         if (StringUtils.isNotBlank(userDTO.getPassword())) {
             oldUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
@@ -87,6 +91,9 @@ public class UserService implements IUserService {
         UserEntity oldUser = userRepository.findOne(userDTO.getId());
         oldUser.setUserName(userDTO.getUserName());
         oldUser.setFullName(userDTO.getFullName());
+        oldUser.setDiachi(userDTO.getDiachi());
+        oldUser.setEmail(userDTO.getEmail());
+        oldUser.setSdienthoai(userDTO.getSdienthoai());
         if (StringUtils.isNotBlank(userDTO.getPassword())) {
             oldUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         }

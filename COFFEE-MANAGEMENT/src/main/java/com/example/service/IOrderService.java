@@ -9,10 +9,11 @@ import java.util.List;
 public interface IOrderService {
     List<TableDTO> findTable();
     List<OrderDTO> findByTableCode(String name);
-    List<ProductDTO> findBySeatCode(String seatCode);
+    List<ProductDTO> findBySeatCodeAndCategory(String seatCode, String productCategory);
     void saveBill(long[] products, String seatCode);
     void updateQuantity(OrderDTO orderDTO);
     void deleteProduct(long[] ids);
     void checkout(long[] ids, String seatCode);
     List<OrderDTO> report(String fromDate, String toDate);
+    String exportBill(String tableCode);
 }

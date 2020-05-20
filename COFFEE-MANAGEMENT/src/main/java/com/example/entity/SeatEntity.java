@@ -20,6 +20,11 @@ public class SeatEntity extends BaseEntity {
 	
 	@OneToMany(mappedBy = "seat")
     private List<BillEntity> bills = new ArrayList<>();
+	
+	@ManyToOne
+	@JoinColumn(name = "areaid")
+	private AreaEntity area;
+
 
 	public String getName() {
 		return name;
@@ -51,5 +56,13 @@ public class SeatEntity extends BaseEntity {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public AreaEntity getArea() {
+		return area;
+	}
+
+	public void setArea(AreaEntity area) {
+		this.area = area;
 	}
 }

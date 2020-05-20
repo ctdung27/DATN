@@ -1,5 +1,6 @@
 package com.example.controller;
 
+import com.example.service.IProductCategoryService;
 import com.example.constant.SystemConstant;
 import com.example.dto.ProductDTO;
 import com.example.service.IProductService;
@@ -22,6 +23,9 @@ public class ProductController {
 
     @Autowired
     private IProductService productService;
+    
+    @Autowired
+    private IProductCategoryService productCategoryService;
 
     @RequestMapping(value = "/admin/product/list", method = RequestMethod.GET)
     public ModelAndView getNews(HttpServletRequest request) {
@@ -40,6 +44,7 @@ public class ProductController {
             model = productService.findById(id);
         }
         initMessageResponse(mav, request);
+        mav.addObject("productcategories", productCategoryService.getProductCategories());
         mav.addObject("model", model);
         return mav;
     }

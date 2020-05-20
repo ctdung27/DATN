@@ -1,5 +1,6 @@
 package com.example.service.impl;
 
+import com.example.repository.ProductCategoryRepository;
 import com.example.converter.ProductConverter;
 import com.example.dto.ProductDTO;
 import com.example.entity.ProductEntity;
@@ -20,6 +21,9 @@ public class ProductService implements IProductService {
 
     @Autowired
     private ProductConverter productConverter;
+    
+    @Autowired
+    private ProductCategoryRepository productCategoryRepository;
 
     @Override
     public List<ProductDTO> findAll() {
@@ -38,6 +42,7 @@ public class ProductService implements IProductService {
     @Transactional
     public ProductDTO insert(ProductDTO productDTO) {
         ProductEntity productEntity = productConverter.convertToEntity(productDTO);
+        productEntity.setProductCategory(productCategoryRepository.findOneByCode(productDTO.getProductCategoryCode()));
         return productConverter.convertToDto(productRepository.save(productEntity));
     }
 
@@ -48,6 +53,7 @@ public class ProductService implements IProductService {
         oldProduct.setName(productDTO.getName());
         oldProduct.setCode(productDTO.getCode());
         oldProduct.setPrice(productDTO.getPrice());
+        oldProduct.setProductCategory(productCategoryRepository.findOneByCode(productDTO.getProductCategoryCode()));
         return productConverter.convertToDto(productRepository.save(oldProduct));
     }
 

@@ -1,11 +1,10 @@
 package com.example.controller;
 
-import com.example.service.IAreaService;
 import com.example.constant.SystemConstant;
-import com.example.dto.ProductDTO;
-import com.example.dto.TableDTO;
-import com.example.service.IProductService;
-import com.example.service.ITableService;
+import com.example.dto.AreaDTO;
+import com.example.dto.ProductCategoryDTO;
+import com.example.service.IAreaService;
+import com.example.service.IProductCategoryService;
 import com.example.util.MessageResponseUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,33 +19,29 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-@Controller(value = "tableControllerOfAdmin")
-public class TableController {
+@Controller(value = "productCategoryControllerOfAdmin")
+public class ProductCategoryController {
 
     @Autowired
-    private ITableService tableService;
-    
-    @Autowired
-    private IAreaService areaService;
+    private IProductCategoryService productCategoryService;
 
-    @RequestMapping(value = "/admin/table/list", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/productcategory/list", method = RequestMethod.GET)
     public ModelAndView getNews(HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("table/list");
-        List<TableDTO> tables = tableService.findAll();
+        ModelAndView mav = new ModelAndView("productcategory/list");
+        List<ProductCategoryDTO> productCategories = productCategoryService.findAll();
         initMessageResponse(mav, request);
-        mav.addObject("tables", tables);
+        mav.addObject("productcategories", productCategories);
         return mav;
     }
 
-    @RequestMapping(value = "/admin/table/edit", method = RequestMethod.GET)
-    public ModelAndView editPostPage(@ModelAttribute("model") TableDTO model,
+    @RequestMapping(value = "/admin/productcategory/edit", method = RequestMethod.GET)
+    public ModelAndView editPostPage(@ModelAttribute("model") ProductCategoryDTO model,
                                      @RequestParam(value = "id", required = false) Long id, HttpServletRequest request) {
-        ModelAndView mav = new ModelAndView("table/edit");
+        ModelAndView mav = new ModelAndView("productcategory/edit");
         if (id != null) {
-            model = tableService.findById(id);
+            model = productCategoryService.findById(id);
         }
         initMessageResponse(mav, request);
-        mav.addObject("areas", areaService.getAreas());
         mav.addObject("model", model);
         return mav;
     }

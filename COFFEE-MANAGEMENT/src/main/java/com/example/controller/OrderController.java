@@ -1,5 +1,9 @@
 package com.example.controller;
 
+import com.example.dto.AreaDTO;
+import com.example.service.IAreaService;
+import com.example.service.IProductCategoryService;
+import com.example.service.ITableService;
 import com.example.dto.OrderDTO;
 import com.example.service.IOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,16 +21,32 @@ public class OrderController {
 
     @Autowired
     private IOrderService orderService;
+    
+    @Autowired
+    private ITableService tableService;
+
+    @Autowired
+    private IAreaService areaService;
+
+    @Autowired
+    private IProductCategoryService productCategoryService;
 
     @RequestMapping(value = "/admin/order/table/list", method = RequestMethod.GET)
-    public ModelAndView getTables() {
+    public ModelAndView getTables(@ModelAttribute("model") AreaDTO model)  {
         ModelAndView mav = new ModelAndView("order/list");
-        mav.addObject("tables", orderService.findTable());
+       
+        if (model.getCode() != null) {
+            mav.addObject("tables", tableService.findByAreaCode(model.getCode()));
+        }
+        mav.addObject("model", model);
+        mav.addObject("areas", areaService.getAreas());
+        mav.addObject("productCategories", productCategoryService.findAll());
         return mav;
     }
-
     @RequestMapping(value = "/admin/order/list", method = RequestMethod.GET)
-    public ModelAndView getOrders(@RequestParam(value = "tableCode", required = false) String tableCode) {
+    public ModelAndView getOrders(@RequestParam(value = "tableCode", required = false) String tableCode,
+            @RequestParam(value = "areaCode", required = false) String areaCode,
+            @RequestParam(value = "urlBill", required = false) String urlBill) {
         ModelAndView mav = new ModelAndView("order/list");
         if (tableCode != null) {
             List<OrderDTO> orders = orderService.findByTableCode(tableCode);
@@ -42,7 +62,15 @@ public class OrderController {
                 mav.addObject("totalPrice", totalPrice);
             }
         }
-        mav.addObject("tables", orderService.findTable());
+        mav.addObject("tables", tableService.findByAreaCode(areaCode));
+        AreaDTO areaDTO = new AreaDTO();
+        areaDTO.setCode(areaCode);
+        mav.addObject("model", areaDTO);
+        mav.addObject("areas", areaService.getAreas());
+        mav.addObject("productCategories", productCategoryService.findAll());
+        if (urlBill != null) {
+            mav.addObject("urlBill", urlBill);
+        }
         return mav;
     }
 }

@@ -6,6 +6,9 @@
         <class>com.example.entity.BillEntity</class>
         <class>com.example.entity.ProductEntity</class>
         <class>com.example.entity.SeatEntity</class>
+        <class>com.example.entity.AreaEntity</class>
+        <class>com.example.entity.ProductCategoryEntity</class>
+        
     </persistence-unit>
 </persistence>
 

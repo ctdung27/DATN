@@ -50,7 +50,7 @@
                 <a href="<c:url value="/admin/user/list"/>" >
                     <i class="menu-icon fa fa-users"></i>
                     <span class="menu-text"></span>
-                    Quản lí nhân viên
+                    Quản Lí Nhân Viên
                     
                 </a>
                
@@ -59,7 +59,7 @@
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-coffee"></i>
                     <span class="menu-text"></span>
-                    Đồ uống
+                    Quản Lí Đồ Uống
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
                 <b class="arrow"></b>
@@ -67,7 +67,14 @@
                     <li>
                         <a href="<c:url value="/admin/product/list"/>">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            DS sản phẩm
+                            Đồ Uống
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li>
+                        <a href="<c:url value="/admin/productcategory/list"/>">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Loại Đồ Uống
                         </a>
                         <b class="arrow"></b>
                     </li>
@@ -77,7 +84,7 @@
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-anchor"></i>
                     <span class="menu-text"></span>
-                    Quản lí tầng, bàn
+                    Quản Lí Tầng, Bàn
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
                 <b class="arrow"></b>
@@ -85,17 +92,25 @@
                     <li>
                         <a href="<c:url value="/admin/table/list"/>">
                             <i class="menu-icon fa fa-caret-right"></i>
-                            DS bàn
+                            Bàn
                         </a>
                         <b class="arrow"></b>
                     </li>
+                     <li>
+                        <a href="<c:url value="/admin/area/list"/>">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            Khu Vực
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    
                 </ul>
             </li>
             <li >
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-cutlery"></i>
                     <span class="menu-text"></span>
-                    Quản lí bếp, bar
+                    Quản Lí Bếp, Bar
                     
                 </a>
                 
@@ -104,11 +119,11 @@
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-money"></i>
                     <span class="menu-text"></span>
-                    Quản lí hóa đơn
-                    
+					Quản Lí Hóa Đơn                    
                 </a>
                 
-            </li>
+            
+            
 	    </security:authorize>
          <security:authorize ifAnyGranted="admin,staff">
              <li >

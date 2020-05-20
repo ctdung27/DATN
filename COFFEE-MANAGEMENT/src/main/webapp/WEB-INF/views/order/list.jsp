@@ -7,6 +7,9 @@
 <c:url var="updateQuantityURL" value="/api/order/" />
 <c:url var="deleteURL" value="/api/order" />
 <c:url var="checkoutURL" value="/api/order/checkout" />
+<c:url var="loadTable" value="/admin/order/table/list" />
+<c:url var="billURL" value="/api/order/bill" />
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -50,36 +53,112 @@
 										<div class="form-horizontal">
 											<%--danh sach ban--%>
 											<div class="row">
-												<div class="col-xs-12">
-													<!-- PAGE CONTENT BEGINS -->
+												<div class="col-sm-6" style="height: 50px;">
+													<form:form action="${loadTable}" commandName="model"
+														method="get">
+														<form:select path="code" id="areaCode">
+															<form:option value="" label="Chọn khu vực" />
+															<form:options items="${areas}" />
+														</form:select>
+														<button type="submit" class="btn btn-sm btn-success">
+															Hiển thị</button>
+													</form:form>
+												</div>
+												<div class="col-sm-6" style="height: 50px;">
+													<c:if test="${not empty tableCode}">
+														<div class="table-btn-controls">
+															<div class="pull-right tableTools-container">
+																<div class="dt-buttons btn-overlap btn-group">
+																	<button
+																		class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
+																		data-toggle="tooltip" type="button"
+																		title="Thêm món cho bàn" id="btnAddProduct"
+																		seatCode="${tableCode}" areaCode="${model.code}">
+																		<i class="fa fa-plus-circle bigger-110 purple"></i>
+																	</button>
+																	<button
+																		class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
+																		data-toggle="tooltip" type="button"
+																		title="Xác nhận thanh toán" onclick="checkout(this)"
+																		seatCode="${tableCode}">
+																		<i class="ace-icon fa fa-check"></i>
+																	</button>
+																	<button
+																		class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
+																		data-toggle="tooltip" type="button"
+																		title="Xóa sản phẩm khỏi bàn" id="btnDeleteProduct"
+																		onclick="deleteProduct(this)" seatCode="${tableCode}">
+																		<i class="ace-icon fa fa-trash-o bigger-120 orange"></i>
+																	</button>
+																</div>
+															</div>
+														</div>
+													</c:if>
+												</div>
+												<div class="col-sm-12" style="height: 90px">
+
 													<div>
 														<ul class="ace-thumbnails clearfix">
 															<c:forEach var="item" items="${tables}">
 																<li><c:url var="orderURL" value="/admin/order/list">
 																		<c:param name="tableCode" value="${item.code}" />
+																		<c:param name="areaCode" value="${model.code}" />
 																	</c:url> <c:if test="${item.status eq 'empty_seat'}">
 																		<a href="${orderURL}" title="Bàn trống"
-																			data-rel="colorbox"> <img width="150"
-																			height="150" alt="150x150"
-																			border=" #130d28 1.5px solid"
+																			data-rel="colorbox"> <img width="70" height="70"
+																			alt="70x70" border=" #130d28 1.5px solid"
 																			src="<c:url value="/template/admin/assets/images/gallery/thumb-1.jpg"/>" />
 																		</a>
 																	</c:if> <c:if test="${item.status eq 'full_seat'}">
 																		<a href="${orderURL}" title="Bàn đã có người"
-																			data-rel="colorbox"> <img width="150"
-																			height="150" alt="150x150"
+																			data-rel="colorbox"> <img width="70" height="70"
+																			alt="70x70"
 																			src="<c:url value="/template/admin/assets/images/gallery/thumb-6.jpg"/>" />
 																		</a>
 																	</c:if>
 																	<div class="tags">
-																		<span class="label-holder"> <span
-																			class="label label-success">${item.name}</span>
-																		</span>
+																		<span class="label"
+																			style="background-color: hsla(140, 100%, 30%, 0.5);">${item.name}</span>
 																	</div></li>
 															</c:forEach>
 														</ul>
 													</div>
 												</div>
+
+
+												<div class="col-sm-6" style="height: 50px;">
+													<select  id="productCategory" style="width: 105.2px;">
+														<c:forEach var="item" items="${productCategories}">
+															<option value="${item.code}">${item.name}</option>
+														</c:forEach>
+													</select>
+													<button type="button" class="btn btn-sm btn-success"
+														id="btnShowProduct">Hiển thị</button>
+												</div>
+
+												<div class="col-sm-6" style="height: 50px;">
+													<div class="pull-right tableTools-container">
+													<button
+														class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
+														data-toggle="tooltip" type="button"
+														title="Thêm vào bàn" id="btnAddProductToTable" seatCode="${tableCode}" areaCode="${model.code}"
+														>
+														<i class="fa fa-plus-circle bigger-110 purple"></i>
+													</button>
+													</div>
+													<table class="table" id="productTable">
+														<thead>
+															<tr>
+																
+																<th class="text-center" style = "color: black;">ĐỒ UỐNG</th>
+																<th class="text-center"></th>
+															</tr>
+														</thead>
+														<tbody>
+														</tbody>
+													</table>
+												</div>
+													
 											</div>
 										</div>
 									</div>
@@ -88,46 +167,18 @@
 							</div>
 							<!-- Begin Content Right-->
 							<div class="col-sm-6" id="contentleft" style="padding-top: 20px;">
-								<c:if test="${not empty tableCode}">
-									<div class="table-btn-controls">
-										<div class="pull-right tableTools-container">
-											<div class="dt-buttons btn-overlap btn-group">
-												<button
-													class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
-													data-toggle="tooltip" type="button"
-													title="Thêm món cho bàn" id="btnAddProduct"
-													seatCode="${tableCode}">
-													<i class="fa fa-plus-circle bigger-110 purple"></i>
-												</button>
-												<button
-													class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
-													data-toggle="tooltip" type="button"
-													title="Xác nhận thanh toán" onclick="checkout(this)"
-													seatCode="${tableCode}">
-													<i class="ace-icon fa fa-check"></i>
-												</button>
-												<button
-													class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
-													data-toggle="tooltip" type="button"
-													title="Xóa sản phẩm khỏi bàn" id="btnDeleteProduct"
-													onclick="deleteProduct(this)" seatCode="${tableCode}">
-													<i class="ace-icon fa fa-trash-o bigger-120 orange"></i>
-												</button>
-											</div>
-										</div>
-									</div>
-								</c:if>
+
 								<div id="ContentRight_danhmuc">
-									<table class="table table-bordered" id="orderTable">
+									<table class="table table-condensed" id="orderTable" style="text-align: center;">
 										<thead>
 											<tr>
-												<th style="width: 58px;">Chọn</th>
-												<th>Tên món</th>
-												<th style="width: 68px;">Số lượng</th>
-												<th>Giá</th>
-												<th>Thành tiền</th>
-												<%--<th>Ghi chú</th>--%>
-												<th>Thao tác</th>
+												<th class="text-center" style="width: 58px;">Chọn</th>
+												<th class="text-center">Tên món</th>
+												<th class="text-center" style="width: 68px;">Số lượng</th>
+												<th class="text-center" >Giá</th>
+												<th class="text-center">Thành tiền</th>
+											
+												<th class="text-center">Thao tác</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -160,8 +211,22 @@
 											</c:if>
 										</tbody>
 									</table>
+
 									<c:if test="${not empty totalPrice}">
-										<p>Tổng tiền: ${totalPrice} VNĐ</p>
+										<hr>
+										<h3 style="text-align: right;">
+											<i>Tổng tiền: ${totalPrice} VNĐ</i>
+										</h3>
+										<button type="button" class="btn btn-primary"
+											id="btnExportBill" seatCode="${tableCode}">Xuất hóa
+											đơn</button>
+									</c:if>
+									<br /> <br />
+									<c:if test="${not empty urlBill}">
+										<c:set var="billDownload" value="/repository/${urlBill}" />
+										<p>
+											Tải hóa đơn tại đây: <a href="${billDownload}">HÓA ĐƠN</a>
+										</p>
 									</c:if>
 								</div>
 
@@ -180,14 +245,23 @@
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">Danh sách món ăn</h4>
+					<h2 class="modal-title">Danh sách đồ uống</h2>
 				</div>
 				<div class="modal-body">
+					<label for="productCategory">Chọn loại đồ uống</label> <select
+						class="form-control" id="productCategory">
+						<c:forEach var="item" items="${productCategories}">
+							<option value="${item.code}">${item.name}</option>
+						</c:forEach>
+					</select> <br />
+					<button type="button" class="btn btn-sm btn-success"
+						id="btnShowProduct">Hiển thị đồ uống</button>
+					<br /> <br />
 					<table class="table" id="productTable">
 						<thead>
 							<tr>
-								<th class="text-center">Chọn món ăn</th>
-								<th class="text-center">Tên món ăn</th>
+								<th class="text-center">Chọn đồ uống</th>
+								<th class="text-center">Tên đồ uống</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -195,6 +269,7 @@
 					</table>
 					<div id="fieldHidden"></div>
 				</div>
+
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary"
 						id="btnAddProductToTable">Thêm món ăn cho bàn</button>
@@ -210,26 +285,32 @@
     $('#btnAddProduct').click(function (e) {
         e.preventDefault();
         openModalAddProduct();
-        loadProduct($(this).attr('seatCode'));
+    });
+
+    $('#btnShowProduct').click(function (e) {
+        e.preventDefault();
+        var productCategory = $('#productCategory').val();
+        loadProduct($('#btnAddProduct').attr('seatCode'), productCategory);
     });
 
     function openModalAddProduct() {
         $('#assignBuildingModal').modal();
     }
 
-    function loadProduct(seatCode) {
+    function loadProduct(seatCode, productCategory) {
         var seatCodeHidden = '<input type="hidden" name="seatCode" value=' + seatCode + ' id="seatCode"></input>';
         $('#fieldHidden').html(seatCodeHidden);
         $.ajax({
-            url: '${loadProduct}?seatCode=' + seatCode,
+            url: '${loadProduct}?seatCode=' + seatCode +'&productCategory='+productCategory+'',
             type: 'GET',
             dataType: 'json',
             success: function (result) {
                 var row = '';
                 $.each(result, function (index, product) {
                     row += '<tr>';
+                    row += '<td class="text-center tenDoUong">' + product.name + '</td>';
                     row += '<td class="text-center"><input type="checkbox" name="checkList" value=' + product.id + ' id="checkbox_' + product.id + '" class="check-box-element" ' + product.checked + '/></td>';
-                    row += '<td class="text-center">' + product.name + '</td>';
+                    
                     row += '</tr>';
                 });
                 $('#productTable tbody').html(row);
@@ -243,20 +324,21 @@
     $('#btnAddProductToTable').click(function (e) {
         e.preventDefault();
         var seatCode = $('#fieldHidden').find('#seatCode').val();
+        var areaCode = $('#btnAddProduct').attr('areaCode');
         var productArrays = $('#productTable').find('tbody input[type=checkbox]:checked').map(function () {
             return $(this).val();
         }).get();
-        addProduct(productArrays, seatCode);
+        addProduct(productArrays, seatCode, areaCode);
     });
 
-    function addProduct(products, seatCode) {
+    function addProduct(products, seatCode, areaCode) {
         $.ajax({
             url: '${addBillUrl}' + seatCode,
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(products),
             success: function (res) {
-                window.location.href = "${formUrl}?tableCode="+seatCode;
+                window.location.href = "${formUrl}?tableCode="+seatCode+"&areaCode="+areaCode+"";
             },
             error: function (res) {
                 console.log(res);
@@ -266,6 +348,7 @@
 
     function updateQuantity(id, btn) {
         var seatCode = $(btn).attr('seatCode');
+        var areaCode = $('#btnAddProduct').attr('areaCode');
         var currentRow = $(btn).closest("tr");
         var quantity = currentRow.find("input[type=number]").val();
         var data = {};
@@ -277,7 +360,7 @@
             contentType:'application/json',
             data: JSON.stringify(data),
             success: function(res) {
-                window.location.href = "${formUrl}?tableCode="+seatCode;
+                window.location.href = "${formUrl}?tableCode="+seatCode+"&areaCode="+areaCode+"";
             },
             error: function(res) {
                 console.log(res);
@@ -290,13 +373,14 @@
             return $(this).val();
         }).get();
         var seatCode = $(btn).attr('seatCode');
+        var areaCode = $('#btnAddProduct').attr('areaCode');
         $.ajax({
             url: '${deleteURL}',
             type: 'DELETE',
             contentType:'application/json',
             data: JSON.stringify(data),
             success: function(res) {
-                window.location.href = "${formUrl}?tableCode="+seatCode;
+                window.location.href = "${formUrl}?tableCode="+seatCode+"&areaCode="+areaCode+"";
             },
             error: function(res) {
                 console.log(res);
@@ -309,19 +393,37 @@
             return $(this).val();
         }).get();
         var seatCode = $(btn).attr('seatCode');
+        var areaCode = $('#btnAddProduct').attr('areaCode');
         $.ajax({
             url: '${checkoutURL}?seatCode='+seatCode,
             type: 'PUT',
             contentType:'application/json',
             data: JSON.stringify(data),
             success: function(res) {
-                window.location.href = "${formUrl}?tableCode="+seatCode;
+                window.location.href = "${formUrl}?tableCode="+seatCode+"&areaCode="+areaCode+"";
             },
             error: function(res) {
                 console.log(res);
             }
         });
     }
+
+    $('#btnExportBill').click(function (e) {
+        e.preventDefault();
+        var seatCode = $(this).attr('seatCode');
+        var areaCode = $('#btnAddProduct').attr('areaCode');
+        $.ajax({
+            url: '${billURL}?tableCode='+seatCode,
+            type: 'GET',
+            success: function(res) {
+                console.log(res);
+                window.location.href = "${formUrl}?tableCode="+seatCode+"&areaCode="+areaCode+"&urlBill="+res+"";
+            },
+            error: function(res) {
+                console.log(res);
+            }
+        });
+    });
 </script>
 	<style>
 h2 {
@@ -329,6 +431,13 @@ h2 {
 	font-size: 140%;
 	font-weight: 700;
 	text-align: center;
+	margin: 0px;
+	font-family: 'Open Sans';
+}
+
+h3 {
+	color: #585858 font-size: 140%;
+	font-weight: 700;
 	margin: 0px;
 	font-family: 'Open Sans';
 }
@@ -346,15 +455,24 @@ h2 {
 }
 
 #ContentRight_danhmuc {
-	margin-top: 100px;
-	border-radius: 20px;
-	height: 430px;
-	background-color: #438EB9;
+	margin-top: 40px;
+	/*box-shadow: 5px 10px #adad85;
+	height: 500px;*/
+	background-color: hsl(60, 20%, 75%);
+	border-radius: 10px;
 }
 
 .list_table {
 	padding-top: 15px;
 	overflow-y: auto;
+}
+.tenDoUong {
+	color: black;
+	font-size: 120%;
+	font-weight: 700;
+	
+
+	font-family: 'Open Sans';
 }
 </style>
 </body>

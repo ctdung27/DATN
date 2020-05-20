@@ -1,5 +1,7 @@
 package com.example.service.impl;
 
+import com.example.repository.AreaRepository;
+import com.example.constant.SystemConstant;
 import com.example.converter.TableConverter;
 import com.example.dto.TableDTO;
 import com.example.entity.SeatEntity;
@@ -20,6 +22,9 @@ public class TableService implements ITableService {
 
     @Autowired
     private TableConverter tableConverter;
+    
+    @Autowired
+    private AreaRepository areaRepository;
 
     @Override
     public List<TableDTO> findAll() {
@@ -38,6 +43,8 @@ public class TableService implements ITableService {
     @Transactional
     public TableDTO insert(TableDTO tableDTO) {
         SeatEntity seatEntity = tableConverter.convertToEntity(tableDTO);
+        seatEntity.setStatus(SystemConstant.EMPTY_SEAT);
+        seatEntity.setArea(areaRepository.findByCode(tableDTO.getAreaCode()));
         return tableConverter.convertToDto(seatRepository.save(seatEntity));
     }
 
@@ -47,6 +54,7 @@ public class TableService implements ITableService {
         SeatEntity oldTable = seatRepository.findOne(tableDTO.getId());
         oldTable.setName(tableDTO.getName());
         oldTable.setCode(tableDTO.getCode());
+        oldTable.setArea(areaRepository.findByCode(tableDTO.getAreaCode()));
         return tableConverter.convertToDto(seatRepository.save(oldTable));
     }
 
@@ -56,5 +64,10 @@ public class TableService implements ITableService {
         for (Long item : ids) {
             seatRepository.delete(item);
         }
+    }
+    @Override
+    public List<TableDTO> findByAreaCode(String areaCode) {
+        List<SeatEntity> results = seatRepository.findByArea_Code(areaCode);
+        return results.stream().map(item -> tableConverter.convertToDto(item)).collect(Collectors.toList());
     }
 }

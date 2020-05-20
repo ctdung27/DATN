@@ -5,6 +5,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Danh sách sản phẩm</title>
 </head>
@@ -30,8 +31,9 @@
                         </c:if>
                         <!-- PAGE CONTENT BEGINS -->
                         <div class="row">
-                            <div class="col-xs-12">
-                                <div class="table-btn-controls">
+                        	<div class="col-sm-9"> chưa code</div>
+                        	<div class="col-sm-3">
+								 <div class="table-btn-controls">
                                     <div class="pull-right tableTools-container">
                                         <div class="dt-buttons btn-overlap btn-group">
                                             <a flag="info" class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
@@ -49,7 +51,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                        	</div>
                         </div>
                         <div class="row">
                             <div class="col-xs-12">
@@ -59,8 +61,8 @@
                                             <tr>
                                                 <th>
                                                 </th>
-                                                <th>Tên sản phẩm</th>
-                                                <th>Mã sản phẩm</th>
+                                                <th>Tên đồ uống</th>
+                                                <th>Mã đồ uống</th>
                                                 <th>Giá</th>
                                                 <th>Thao tác</th>
                                             </tr>

@@ -57,6 +57,15 @@
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
 
+	<servlet>
+		<servlet-name>DisplayImage</servlet-name>
+		<servlet-class>com.example.util.ReadFileUtils</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DisplayImage</servlet-name>
+		<url-pattern>/repository/*</url-pattern>
+	</servlet-mapping>
+	
     <session-config>
         <tracking-mode>COOKIE</tracking-mode>
     </session-config>

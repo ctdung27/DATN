@@ -5,6 +5,7 @@ public class TableDTO extends AbstractDTO {
     private String name;
     private String code;
     private String status;
+    private String areaCode;
 
     public String getName() {
         return name;
@@ -28,5 +29,13 @@ public class TableDTO extends AbstractDTO {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getAreaCode() {
+        return areaCode;
+    }
+
+    public void setAreaCode(String areaCode) {
+        this.areaCode = areaCode;
     }
 }

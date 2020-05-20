@@ -113,6 +113,10 @@ body#LoginForm {
 .dt{
 	color: red;
 }
+.btn{
+	border-radius:10px
+	
+}
 
 
 /*----------------------------------*/
@@ -125,5 +129,7 @@ body#LoginForm {
     margin: 0;
     padding: 8px 20px 24px;
 }
+
+
 
 

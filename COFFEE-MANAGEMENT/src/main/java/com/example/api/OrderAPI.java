@@ -38,4 +38,9 @@ public class OrderAPI {
         orderService.checkout(ids, seatCode);
         return ResponseEntity.noContent().build();
     }
+    
+    @GetMapping("/bill")
+    public String exportBill(@RequestParam(value = "tableCode", required = false) String tableCode) {
+        return orderService.exportBill(tableCode);
+    }
 }
