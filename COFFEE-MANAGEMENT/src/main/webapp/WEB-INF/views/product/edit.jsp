@@ -77,15 +77,16 @@
 											<div>
 												<input type="button" class="btn btn-success btn-bold"
 													value="Cập nhật" id="btnAddOrUpdateProduct" /> <a
-													href="admin/product/list"
-													class="col-sm-3 btn btn-warning btn-bold">Trở về</a>
+													href="/admin/product/list"
+													class="btn  btn-warning btn-bold">Trở về</a>
 											</div>
 										</c:if>
 										<c:if test="${empty model.id}">
 											<div>
 												<input type="button" class="btn btn-success btn-bold"
-													value="Thêm mới" id="btnAddOrUpdateProduct" /> <a
-													href="admin/product/list" class="btn  btn-warning btn-bold">Trở
+													value="Thêm mới" id="btnAddOrUpdateProduct" /> 
+													<a
+													href="/admin/product/list" class="btn  btn-warning btn-bold">Trở
 													về</a>
 											</div>
 										</c:if>

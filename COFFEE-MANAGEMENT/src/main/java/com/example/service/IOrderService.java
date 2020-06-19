@@ -2,8 +2,10 @@ package com.example.service;
 
 import com.example.dto.OrderDTO;
 import com.example.dto.ProductDTO;
+import com.example.dto.ReportDTO;
 import com.example.dto.TableDTO;
 
+import java.sql.Date;
 import java.util.List;
 
 public interface IOrderService {
@@ -14,6 +16,8 @@ public interface IOrderService {
     void updateQuantity(OrderDTO orderDTO);
     void deleteProduct(long[] ids);
     void checkout(long[] ids, String seatCode);
-    List<OrderDTO> report(String fromDate, String toDate);
+    ReportDTO report(String fromDate, String toDate);
+ 
     String exportBill(String tableCode);
+    List<OrderDTO> findByCode(String code);
 }

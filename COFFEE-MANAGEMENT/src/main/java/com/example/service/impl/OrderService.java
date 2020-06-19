@@ -3,6 +3,7 @@ package com.example.service.impl;
 import com.example.constant.SystemConstant;
 import com.example.dto.OrderDTO;
 import com.example.dto.ProductDTO;
+import com.example.dto.ReportDTO;
 import com.example.dto.TableDTO;
 import com.example.entity.BillEntity;
 import com.example.entity.ProductEntity;
@@ -26,9 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.FileOutputStream;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 @Service
 public class OrderService implements IOrderService {
@@ -129,9 +128,12 @@ public class OrderService implements IOrderService {
     @Transactional
     public void checkout(long[] ids, String seatCode) {
         SeatEntity seatEntity = seatRepository.findOneByCode(seatCode);
+        Random objGenerator = new Random();
+        int randomNumber = objGenerator.nextInt(1000);
         for (long item: ids) {
             BillEntity billEntity = billRepository.findOne(item);
             billEntity.setStatus(SystemConstant.ORDER_DONE);
+            billEntity.setCode(String.valueOf(randomNumber));
             billRepository.save(billEntity);
         }
         seatEntity.setStatus(SystemConstant.EMPTY_SEAT);
@@ -139,8 +141,9 @@ public class OrderService implements IOrderService {
     }
 
     @Override
-    public List<OrderDTO> report(String fromDateStr, String toDateStr) {
-        List<OrderDTO> results = new ArrayList<>();
+    public ReportDTO report(String fromDateStr, String toDateStr) {
+        ReportDTO result = new ReportDTO();
+        List<OrderDTO> orders = new ArrayList<>();
         Date fromDate = StringUtils.isNotBlank(fromDateStr) ? DateUtils.convertStringToDate("dd-MM-yyyy", fromDateStr) : null;
         Date toDate = StringUtils.isNotBlank(toDateStr) ? DateUtils.convertStringToDate("dd-MM-yyyy", toDateStr) : null;
         List<BillEntity> billEntities = new ArrayList<>();
@@ -150,20 +153,27 @@ public class OrderService implements IOrderService {
             billEntities = billRepository.findByCreatedDateBefore(toDate);
         } else if (fromDate != null && toDate != null && (fromDate.compareTo(toDate) < 0)) {
             billEntities = billRepository.findByCreatedDateBetween(fromDate, toDate);
-        } /*else if (fromDate != null && toDate != null && (fromDate.compareTo(toDate) == 0)) {
-            billEntities = billRepository.findByCreatedDate(fromDate);
-        }*/
+        } 
+        Map<String, Object> maps = new HashMap<>();
+        int totalPrice = 0;
         for (BillEntity item: billEntities) {
             OrderDTO orderDTO = new OrderDTO();
-            orderDTO.setId(item.getId());
-            orderDTO.setName(item.getProduct().getName());
-            orderDTO.setPrice(item.getProduct().getPrice());
-            orderDTO.setQuantity(item.getQuantity());
-            orderDTO.setTotalPrice(item.getProduct().getPrice() * item.getQuantity());
+           
+            //orderDTO.setTotalPrice(item.getProduct().getPrice() * item.getQuantity());
+           
             orderDTO.setCreatedDate(item.getCreatedDate());
-            results.add(orderDTO);
+         
+            maps.put(item.getCode(), orderDTO);
+            totalPrice += item.getTotalPrice();
         }
-        return results;
+        for (Map.Entry<String, Object> entry : maps.entrySet()) {
+            OrderDTO orderDTO = (OrderDTO) entry.getValue();
+            orderDTO.setCode(entry.getKey());
+            orders.add(orderDTO);
+        }
+        result.setOrders(orders);
+        result.setTotalPrice(totalPrice);
+        return result;
     }
     @Override
     public String exportBill(String tableCode) {
@@ -173,7 +183,7 @@ public class OrderService implements IOrderService {
         	//Tạo đối tượng file word;
         	XWPFDocument document = new XWPFDocument();
         	
-        	//Tạo tiêu đề HOMIE COFFE HOUSE
+        	
         	XWPFParagraph titleGraph = document.createParagraph();
         	 titleGraph.setAlignment(ParagraphAlignment.CENTER);
         	 
@@ -207,6 +217,11 @@ public class OrderService implements IOrderService {
              titleRun4.setText(title4);
              
              
+             XWPFParagraph titleGraph5 = document.createParagraph();
+             titleGraph5.setAlignment(ParagraphAlignment.CENTER);
+             String title5 = "Thu ngân: "+ "Tiến Dũng";
+             XWPFRun titleRun5 = titleGraph5.createRun();
+             titleRun5.setText(title5);
             
            //create table
              XWPFTable table = document.createTable();
@@ -233,7 +248,9 @@ public class OrderService implements IOrderService {
              XWPFParagraph paragraph2 = document.createParagraph();
              paragraph2.setAlignment(ParagraphAlignment.CENTER);
              XWPFRun run = paragraph2.createRun();
+             run.setBold(true);
              run.setText("Tổng tiền:    "+ tog+" VNĐ");
+             
              
            
              XWPFParagraph titleGraph6 = document.createParagraph();
@@ -253,6 +270,24 @@ public class OrderService implements IOrderService {
         } catch (Exception e) {
             return null;
         }
+    }
+    
+    
+    @Override
+    public List<OrderDTO> findByCode(String code) {
+        List<OrderDTO> results = new ArrayList<>();
+        List<BillEntity> billEntities = billRepository.findByCode(code);
+        for (BillEntity item: billEntities) {
+            OrderDTO orderDTO = new OrderDTO();
+            orderDTO.setId(item.getId());
+            orderDTO.setName(item.getProduct().getName());
+            orderDTO.setPrice(item.getProduct().getPrice());
+            orderDTO.setQuantity(item.getQuantity());
+            orderDTO.setTotalPrice(item.getProduct().getPrice() * item.getQuantity());
+            orderDTO.setCreatedDate(item.getCreatedDate());
+            results.add(orderDTO);
+        }
+        return results;
     }
 
 }

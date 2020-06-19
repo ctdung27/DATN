@@ -30,6 +30,8 @@ public class AreaController {
         List<AreaDTO> areas = areaService.findAll();
         initMessageResponse(mav, request);
         mav.addObject("areas", areas);
+        mav.addObject("activeAreas", "active");
+        mav.addObject("activeArea", "active open");
         return mav;
     }
 

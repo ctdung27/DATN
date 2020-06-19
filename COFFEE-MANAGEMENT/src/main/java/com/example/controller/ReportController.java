@@ -22,14 +22,17 @@ public class ReportController {
     @RequestMapping(value = "/admin/report/list", method = RequestMethod.GET)
     public ModelAndView getReport(@ModelAttribute("model") ReportDTO model) {
         ModelAndView mav = new ModelAndView("report/list");
-        List<OrderDTO> reports = orderService.report(model.getFromDate(), model.getToDate());
-        int total = 0;
-        for (OrderDTO item: reports) {
-            total += item.getTotalPrice();
-            mav.addObject("total", total);
-        }
-        mav.addObject("reports", reports);
+        ReportDTO report = orderService.report(model.getFromDate(), model.getToDate());
+        mav.addObject("reports", report.getOrders());
+        mav.addObject("totalPrice", report.getTotalPrice());
         mav.addObject("model", model);
+        mav.addObject("activeReport", "active");
+        return mav;
+    }
+    @RequestMapping(value = "/admin/report/timekeeping", method = RequestMethod.GET)
+    public ModelAndView getKeeping() {
+        ModelAndView mav = new ModelAndView("report/timekeeping");
+        mav.addObject("activeTimekeeping", "active");
         return mav;
     }
 }

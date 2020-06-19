@@ -25,12 +25,16 @@ public class CustomUserDetailsService implements UserDetailsService {
 
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		UserEntity userEntity = userRepository.findOneByUserNameAndStatus(username, SystemConstant.ACTIVE_STATUS);
+		UserEntity userEntity = userRepository.findOneByUserNameAndStatus(username, SystemConstant.ACTIVE_STATUS);   // xử lí username ( password đc spring xử lí ngầm)
 		
-		if (userEntity == null) {
-			throw new UsernameNotFoundException("User not found");
+		if (userEntity == null) {                                              
+			throw new UsernameNotFoundException("User Not Found");      // đăng nhập fail ---> security.xml -->  authentication-failure-url="/login?incorrectAccount"/>
 		}
-		List<GrantedAuthority> authorities = new ArrayList<>();
+		
+		
+		
+		//put thong tin vao security để duy trì thông tin đó khi user login vào hệ thống
+		List<GrantedAuthority> authorities = new ArrayList<>();              // authorities  :vai trò
 		for (RoleEntity role: userEntity.getRoles()) {
 			authorities.add(new SimpleGrantedAuthority(role.getCode()));
 		}

@@ -33,6 +33,8 @@ public class ProductController {
         List<ProductDTO> products = productService.findAll();
         initMessageResponse(mav, request);
         mav.addObject("products", products);
+        mav.addObject("activeProducts", "active");
+        mav.addObject("activeProduct", "active open");
         return mav;
     }
 

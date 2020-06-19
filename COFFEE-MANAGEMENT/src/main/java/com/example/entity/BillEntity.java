@@ -22,6 +22,9 @@ public class BillEntity extends BaseEntity {
 	@Column(name = "note", columnDefinition = "TEXT")
 	private String note;
 	
+	@Column
+	private String code;
+	
 	@ManyToOne
 	@JoinColumn(name = "productid")
 	private ProductEntity product;
@@ -29,7 +32,11 @@ public class BillEntity extends BaseEntity {
 	@ManyToOne
 	@JoinColumn(name = "seatid")
 	private SeatEntity seat;
-
+	
+	@ManyToOne
+	@JoinColumn(name = "userid")
+	private UserEntity user;
+	
 	public String getStatus() {
 		return status;
 	}
@@ -77,4 +84,23 @@ public class BillEntity extends BaseEntity {
 	public void setNote(String note) {
 		this.note = note;
 	}
+
+	public UserEntity getUser() {
+		return user;
+	}
+
+	public void setUser(UserEntity user) {
+		this.user = user;
+	}
+	
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+	
+	
+	
 }

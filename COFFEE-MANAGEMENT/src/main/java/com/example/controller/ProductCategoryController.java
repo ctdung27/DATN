@@ -31,6 +31,8 @@ public class ProductCategoryController {
         List<ProductCategoryDTO> productCategories = productCategoryService.findAll();
         initMessageResponse(mav, request);
         mav.addObject("productcategories", productCategories);
+        mav.addObject("activeProductCategories", "active");
+        mav.addObject("activeProductCategorie", "active open");
         return mav;
     }
 

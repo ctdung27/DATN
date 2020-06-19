@@ -8,8 +8,15 @@
         <div class="navbar-header pull-left">
             <a href="#" class="navbar-brand">
                 <small>
-                    <i class="fa fa-leaf"></i>
+                <security:authorize ifAnyGranted="admin">
+							<i class="fa fa-leaf"></i>
                     HOMIE MANAGEMENT
+					</security:authorize>
+                	<security:authorize ifAnyGranted="staff">
+							<i class="fa fa-leaf"></i>
+                    HOMIE COFFEE HOUSE
+					</security:authorize>
+                   
                 </small>
             </a>
         </div>

@@ -11,6 +11,7 @@ public class OrderDTO {
     private Integer totalPrice;
     private String note;
     private Date createdDate;
+    private String code;
 
     public Long getId() {
         return id;
@@ -66,5 +67,13 @@ public class OrderDTO {
 
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 }

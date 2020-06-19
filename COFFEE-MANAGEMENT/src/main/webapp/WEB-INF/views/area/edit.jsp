@@ -6,7 +6,7 @@
 <head>
 <title>Chi tiết khu vực</title>
 </head>
-<body>
+<body class="no-skin">
 	<div class="main-content">
 		<div class="main-content-inner">
 			<div class="breadcrumbs" id="breadcrumbs">

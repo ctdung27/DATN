@@ -33,6 +33,8 @@ public class UserController {
         List<UserDTO> users = userService.findAll();
         initMessageResponse(mav, request);
         mav.addObject("users", users);
+        mav.addObject("activeUsers", "active");
+        
         return mav;
     }
 

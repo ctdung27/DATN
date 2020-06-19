@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AreaConverter {
-
+  // ModelMapper là thư viện chuyển đổi đối tượng ban đầu sang dto
     @Autowired
     private ModelMapper modelMapper;
 

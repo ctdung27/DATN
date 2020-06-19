@@ -35,12 +35,14 @@ public class TableController {
         List<TableDTO> tables = tableService.findAll();
         initMessageResponse(mav, request);
         mav.addObject("tables", tables);
+        mav.addObject("activeTables", "active");
+        mav.addObject("activeTable", "active open");
         return mav;
     }
 
-    @RequestMapping(value = "/admin/table/edit", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/table/edit", method = RequestMethod.GET)  
     public ModelAndView editPostPage(@ModelAttribute("model") TableDTO model,
-                                     @RequestParam(value = "id", required = false) Long id, HttpServletRequest request) {
+                                     @RequestParam(value = "id", required = false) Long id, HttpServletRequest request) {   /// sư dụng cho thêm mới và cập nhât (cập nhật thì có id, thêm mới thì không)
         ModelAndView mav = new ModelAndView("table/edit");
         if (id != null) {
             model = tableService.findById(id);

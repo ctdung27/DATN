@@ -29,9 +29,9 @@
 						BÁN HÀNG
 						<h2>
 				</ul>
-				<!-- /.breadcrumb -->
+			
 			</div>
-			<div class="page-content-order ">
+			<div class="page-content-order">
 				<div class="row">
 					<div class="col-xs-12">
 						<c:if test="${messageResponse!=null}">
@@ -56,12 +56,12 @@
 												<div class="col-sm-6" style="height: 50px;">
 													<form:form action="${loadTable}" commandName="model"
 														method="get">
-														<form:select path="code" id="areaCode">
+														<form:select path="code" id="areaCode"
+															style="border-radius: 20px;width: 137px;text-align: center;">
 															<form:option value="" label="Chọn khu vực" />
 															<form:options items="${areas}" />
 														</form:select>
-														<button type="submit" class="btn btn-sm btn-success">
-															Hiển thị</button>
+
 													</form:form>
 												</div>
 												<div class="col-sm-6" style="height: 50px;">
@@ -127,38 +127,34 @@
 
 
 												<div class="col-sm-6" style="height: 50px;">
-													<select  id="productCategory" style="width: 105.2px;">
-														<c:forEach var="item" items="${productCategories}">
-															<option value="${item.code}">${item.name}</option>
-														</c:forEach>
+													<select id="productCategory"
+														style="border-radius: 20px; width: 137px;"
+														onchange="loadProduct($('#btnAddProduct').attr('seatCode'),$('#productCategory').val())">
+														<option value="Chọn Loại Đồ Uống">Chọn Loại Đồ
+															Uống
+															<c:forEach var="item" items="${productCategories}">
+																<option value="${item.code}">${item.name}</option>
+															</c:forEach>
 													</select>
-													<button type="button" class="btn btn-sm btn-success"
-														id="btnShowProduct">Hiển thị</button>
 												</div>
 
 												<div class="col-sm-6" style="height: 50px;">
 													<div class="pull-right tableTools-container">
-													<button
-														class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
-														data-toggle="tooltip" type="button"
-														title="Thêm vào bàn" id="btnAddProductToTable" seatCode="${tableCode}" areaCode="${model.code}"
-														>
-														<i class="fa fa-plus-circle bigger-110 purple"></i>
-													</button>
+														<button
+															class="dt-button buttons-colvis btn btn-white btn-primary btn-bold"
+															data-toggle="tooltip" type="button" title="Thêm vào bàn"
+															id="btnAddProductToTable" seatCode="${tableCode}"
+															areaCode="${model.code}">
+															<i class="fa fa-plus-circle bigger-110 purple"></i>
+														</button>
 													</div>
-													<table class="table" id="productTable">
-														<thead>
-															<tr>
-																
-																<th class="text-center" style = "color: black;">ĐỒ UỐNG</th>
-																<th class="text-center"></th>
-															</tr>
-														</thead>
+													<table style="background-color: hsl(60, 20%, 75%);" class="table table-hover table-bordered"  id="productTable">
+
 														<tbody>
 														</tbody>
 													</table>
 												</div>
-													
+
 											</div>
 										</div>
 									</div>
@@ -167,70 +163,69 @@
 							</div>
 							<!-- Begin Content Right-->
 							<div class="col-sm-6" id="contentleft" style="padding-top: 20px;">
+								<c:if test="${not empty tableCode}">
+									<div id="ContentRight_danhmuc">
 
-								<div id="ContentRight_danhmuc">
-									<table class="table table-condensed" id="orderTable" style="text-align: center;">
-										<thead>
-											<tr>
-												<th class="text-center" style="width: 58px;">Chọn</th>
-												<th class="text-center">Tên món</th>
-												<th class="text-center" style="width: 68px;">Số lượng</th>
-												<th class="text-center" >Giá</th>
-												<th class="text-center">Thành tiền</th>
-											
-												<th class="text-center">Thao tác</th>
-											</tr>
-										</thead>
-										<tbody>
-											<c:if test="${not empty orders}">
-												<c:forEach var="item" items="${orders}">
-													<tr>
-														<td style="padding-left: 20px;"><input
-															type="checkbox" value="${item.id}"
-															id="checkbox_${item.id}" class="check-box-element" /></td>
-														<td>${item.name}</td>
-														<td><input type="number" name="quantity"
-															id="quantity_${item.id}" value="${item.quantity}"
-															style="height: 33px; width: 43.45503px; padding-left: 8px;">
-														</td>
-														<td>${item.price}</td>
-														<td>${item.totalPrice}VNĐ</td>
-														<%--<td>${item.note}</td>--%>
-														<td>
-															<button class="btn btn-xs btn-primary btn-edit"
-																data-toggle="tooltip" type="button"
-																title="Cập nhật số lượng"
-																onclick="updateQuantity(${item.id}, this)"
-																seatCode="${tableCode}">
-																<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-															</button>
+										<table class="table table-condensed " id="orderTable"
+											style="text-align: center;">
+											<thead>
+												<tr>
+													<th class="text-center" style="width: 58px;">Chọn</th>
+													<th class="text-center">Tên món</th>
+													<th class="text-center" style="width: 68px;">Số lượng</th>
+													<th class="text-center">Giá</th>
+													<th class="text-center">Thành tiền</th>
 
-														</td>
-													</tr>
-												</c:forEach>
-											</c:if>
-										</tbody>
-									</table>
-
-									<c:if test="${not empty totalPrice}">
-										<hr>
-										<h3 style="text-align: right;">
-											<i>Tổng tiền: ${totalPrice} VNĐ</i>
-										</h3>
-										<button type="button" class="btn btn-primary"
-											id="btnExportBill" seatCode="${tableCode}">Xuất hóa
-											đơn</button>
-									</c:if>
-									<br /> <br />
-									<c:if test="${not empty urlBill}">
-										<c:set var="billDownload" value="/repository/${urlBill}" />
-										<p>
-											Tải hóa đơn tại đây: <a href="${billDownload}">HÓA ĐƠN</a>
-										</p>
-									</c:if>
-								</div>
-
-
+													<th class="text-center">Thao tác</th>
+												</tr>
+											</thead>
+											<tbody>
+												<c:if test="${not empty orders}">
+													<c:forEach var="item" items="${orders}">
+														<tr>
+															<td style="padding-left: 20px;"><input
+																type="checkbox" value="${item.id}"
+																id="checkbox_${item.id}" class="check-box-element" checked/></td>
+															<td>${item.name}</td>
+															<td><input type="number" name="quantity"
+																id="quantity_${item.id}" value="${item.quantity}" 
+																style="height: 33px; width: 43.45503px; padding-left: 8px;">
+															</td>
+															<td>${item.price}</td>
+															<td>${item.totalPrice}VNĐ</td>
+															<%--<td>${item.note}</td>--%>
+															<td>
+																<button class="btn btn-xs btn-primary btn-edit"
+																	data-toggle="tooltip" type="button"
+																	title="Cập nhật số lượng"
+																	onclick="updateQuantity(${item.id}, this)"
+																	seatCode="${tableCode}">
+																	<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+																</button>
+															</td>
+														</tr>
+													</c:forEach>
+												</c:if>
+											</tbody>
+										</table>
+										<c:if test="${not empty totalPrice}">
+											<hr>
+											<h3 style="text-align: right;">
+												<i>Tổng tiền: ${totalPrice} VNĐ</i>
+											</h3>
+											<button type="button" class="btn btn-primary"
+												id="btnExportBill" seatCode="${tableCode}">Xuất hóa
+												đơn</button>
+										</c:if>
+										<br /> <br />
+										<c:if test="${not empty urlBill}">
+											<c:set var="billDownload" value="/repository/${urlBill}" />
+											<p>
+												Tải hóa đơn tại đây: <a href="${billDownload}">HÓA ĐƠN</a>
+											</p>
+										</c:if>
+									</div>
+								</c:if>
 							</div>
 						</div>
 
@@ -243,10 +238,7 @@
 	<div class="modal fade" id="assignBuildingModal" role="dialog">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h2 class="modal-title">Danh sách đồ uống</h2>
-				</div>
+				<div class="modal-header"></div>
 				<div class="modal-body">
 					<label for="productCategory">Chọn loại đồ uống</label> <select
 						class="form-control" id="productCategory">
@@ -270,10 +262,7 @@
 					<div id="fieldHidden"></div>
 				</div>
 
-				<div class="modal-footer">
-					<button type="button" class="btn btn-primary"
-						id="btnAddProductToTable">Thêm món ăn cho bàn</button>
-				</div>
+
 			</div>
 		</div>
 	</div>
@@ -281,7 +270,10 @@
     $(document).ready(function () {
 
     });
-
+    $('select').change(function() {
+        $(this).parents('form').submit();
+    });
+ 
     $('#btnAddProduct').click(function (e) {
         e.preventDefault();
         openModalAddProduct();
@@ -296,6 +288,7 @@
     function openModalAddProduct() {
         $('#assignBuildingModal').modal();
     }
+    
 
     function loadProduct(seatCode, productCategory) {
         var seatCodeHidden = '<input type="hidden" name="seatCode" value=' + seatCode + ' id="seatCode"></input>';
@@ -466,13 +459,19 @@ h3 {
 	padding-top: 15px;
 	overflow-y: auto;
 }
+
 .tenDoUong {
 	color: black;
 	font-size: 120%;
 	font-weight: 700;
-	
-
 	font-family: 'Open Sans';
+}
+.page-content-order {
+	background-image: url(/template/admin/assets/css/images/anh-nen3.jpg);
+	
+	position: relative;
+	margin: 0;
+	padding: 8px 20px 24px
 }
 </style>
 </body>

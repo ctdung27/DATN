@@ -118,7 +118,6 @@
 		<script>
 			$(document).ready(function() {
 			});
-
 			$('#btnAddOrUpdateUser').click(function(event) {
 				event.preventDefault();
 				var data = {};
@@ -128,7 +127,6 @@
 				});
 				updateUser(data);
 			});
-
 			function updateUser(data) {
 				$
 						.ajax({

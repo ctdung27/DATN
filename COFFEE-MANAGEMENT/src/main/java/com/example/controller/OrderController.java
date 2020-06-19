@@ -41,6 +41,8 @@ public class OrderController {
         mav.addObject("model", model);
         mav.addObject("areas", areaService.getAreas());
         mav.addObject("productCategories", productCategoryService.findAll());
+        mav.addObject("activeOrders", "active");
+       ;
         return mav;
     }
     @RequestMapping(value = "/admin/order/list", method = RequestMethod.GET)

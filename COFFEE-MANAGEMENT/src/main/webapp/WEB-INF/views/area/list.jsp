@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>Danh sách khu vực</title>
 </head>
-<body>
+<body class="no-skin">
 <div class="main-content">
     <%--<form:form commandName="model" action="${formUrl}" id="listForm" method="GET">--%>
         <div class="main-content-inner">
@@ -59,7 +59,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered">
+                                    <table class="table table-bordered table-hover table-striped">
                                         <thead>
                                             <tr>
                                                 <th>
@@ -72,20 +72,23 @@
                                         <tbody>
                                             <c:forEach var="item" items="${areas}">
                                                 <tr>
-                                                    <td>
-                                                        <input type="checkbox" name="checkList" value="${item.id}" id="checkbox_${item.id}" class="check-box-element"/>
-                                                    </td>
-                                                    <td>${item.name}</td>
-                                                    <td>${item.code}</td>
-                                                    <td>
-                                                        <c:url var="editArea" value="/admin/area/edit">
-                                                            <c:param name="id" value="${item.id}"/>
-                                                        </c:url>
-                                                        <a class="btn btn-sm btn-primary btn-edit" data-toggle="tooltip"
-                                                           title="Cập nhật khu vực" href='${editArea}'><i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                        </a>
-                                                    </td>
-                                                </tr>
+													<td class="center">
+													<label class="pos-rel">
+															<input type="checkbox" class="ace"  name="checkList" value="${item.id}" id="checkbox_${item.id}"/>
+															<span class="lbl"></span>
+														</label>
+													
+												</td>
+													<td>${item.name}</td>
+													<td>${item.code}</td>
+													<td><c:url var="editArea" value="/admin/area/edit">
+															<c:param name="id" value="${item.id}" />
+														</c:url> <a class="btn btn-sm btn-primary btn-edit"
+														data-toggle="tooltip" title="Cập nhật khu vực"
+														href='${editArea}'><i class="fa fa-pencil-square-o"
+															aria-hidden="true"></i> <span class="menu-text"></span>
+															Cập nhật</a></td>
+												</tr>
                                             </c:forEach>
                                         </tbody>
                                     </table>
@@ -99,32 +102,34 @@
     <%--</form:form>--%>
 </div>
 <script type="text/javascript">
-    $(document).ready(function () {
-    });
-    function warningBeforeDelete() {
-        showAlertBeforeDelete(function () {
-            event.preventDefault();
-            var dataArray = $(' tbody input[type=checkbox]:checked').map(function () {
-                return $(this).val();
-            }).get();
-            deleteArea(dataArray);
-        });
-    }
-    function deleteArea(data) {
-        $.ajax({
-            url: '${areaAPI}',
-            type: 'DELETE',
-            contentType:'application/json',
-            data: JSON.stringify(data),
-            success: function(res) {
-                window.location.href = "<c:url value='/admin/area/list?message=delete_success'/>";
-            },
-            error: function(res) {
-                console.log(res);
-                window.location.href = "<c:url value='/admin/area/list?message=error_system'/>";
-            }
-        });
-    }
+	$(document).ready(function() {
+	});
+	function warningBeforeDelete() {
+		showAlertBeforeDelete(function() {
+			event.preventDefault();
+			var dataArray = $(' tbody input[type=checkbox]:checked').map(
+					function() {
+						return $(this).val();
+					}).get();
+			deleteArea(dataArray);
+		});
+	}
+	function deleteArea(data) {
+		$
+				.ajax({
+					url : '${areaAPI}',
+					type : 'DELETE',
+					contentType : 'application/json',
+					data : JSON.stringify(data),
+					success : function(res) {
+						window.location.href = "<c:url value='/admin/area/list?message=delete_success'/>";
+					},
+					error : function(res) {
+						console.log(res);
+						window.location.href = "<c:url value='/admin/area/list?message=error_system'/>";
+					}
+				});
+	}
 </script>
 <style>
 h2 {

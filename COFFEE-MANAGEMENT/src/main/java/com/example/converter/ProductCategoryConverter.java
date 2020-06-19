@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductCategoryConverter {
-
+	// ModelMapper là thư viện chuyển đổi đối tượng ban đầu sang dto
     @Autowired
     private ModelMapper modelMapper;
 

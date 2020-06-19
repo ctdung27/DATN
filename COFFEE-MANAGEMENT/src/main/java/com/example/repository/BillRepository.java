@@ -14,4 +14,5 @@ public interface BillRepository extends JpaRepository<BillEntity, Long> {
     List<BillEntity> findByCreatedDateAfter(Date from);
     List<BillEntity> findByCreatedDateBetween(Date from, Date to);
     List<BillEntity> findByCreatedDate(Date date);
+    List<BillEntity> findByCode(String code);
 }
